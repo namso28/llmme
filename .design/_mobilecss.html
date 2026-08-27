@@ -1,0 +1,26 @@
+.phone {
+  width: 390px; height: 844px;
+  display: flex; flex-direction: column;
+  background: var(--bg); overflow: hidden;
+}
+.mhead {
+  flex: none;
+  display: flex; align-items: center; gap: 11px;
+  padding: 48px 18px 14px;
+  border-bottom: 1px solid var(--hair);
+}
+.mhead__avatar {
+  width: 36px; height: 36px; flex: none;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%; border: 1px solid var(--accent-line);
+  background: var(--accent-soft); color: var(--accent);
+  font-family: var(--serif); font-size: 14px;
+}
+.mhead__btn {
+  width: 44px; height: 44px; flex: none;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--muted);
+}
+.mbody { flex: 1; min-height: 0; overflow: hidden; padding: 22px 18px 0; }
+.mdock { flex: none; padding: 14px 18px 26px; }
+.msuggestions { display: flex; flex-direction: column; gap: 9px; }

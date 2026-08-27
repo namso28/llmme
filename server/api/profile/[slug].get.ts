@@ -13,7 +13,12 @@ export default defineEventHandler(async (event): Promise<ProfilePayload> => {
     throw createError({ statusCode: 404, statusMessage: 'Profil nicht gefunden' })
   }
 
-  const cv = await readDoc(slug, 'cv.md')
+  const [cv, zeugnis] = await Promise.all([
+    readDoc(slug, 'cv.md'),
+    readDoc(slug, 'zeugnis.md'),
+  ])
+
+  const label = typeof zeugnis?.meta?.quelle === 'string' ? zeugnis.meta.quelle.trim() : ''
 
   return {
     slug,
@@ -22,5 +27,9 @@ export default defineEventHandler(async (event): Promise<ProfilePayload> => {
     // Feedback und FAQ werden bewusst nicht ausgeliefert — sie fließen nur in
     // den System-Prompt ein und gehören nicht auf die öffentliche Seite.
     cvHtml: renderMarkdown(cv?.body ?? '_Noch kein Lebenslauf hinterlegt._'),
+    // Das Zeugnis dagegen schon: es ist im Panel aufschlagbar. Sein Frontmatter
+    // (Unterzeichner, Quellenbezeichnung) bleibt dabei außen vor, gray-matter
+    // trennt es ab — ausgeliefert wird nur der Fließtext.
+    ...(zeugnis?.body ? { zeugnis: { label: label || 'Arbeitszeugnis', html: renderMarkdown(zeugnis.body) } } : {}),
   }
 })

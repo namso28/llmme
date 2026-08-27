@@ -10,7 +10,8 @@ unterzeichner:
 
 <!--
   Arbeitszeugnis der anwalt.de services AG vom 30.11.2025.
-  Erscheint NICHT auf der Seite — geht nur in den Prompt.
+  Erscheint auf der Seite: im Lebenslauf-Panel als zweites Dokument. Der Text
+  hier ist damit öffentlich — das Frontmatter oben nicht, es wird abgetrennt.
 
   Bewusst NICHT übernommen: Geburtsdatum, Anschrift und Kontaktdaten des
   Unternehmens, Vorstands- und Aufsichtsratsliste, IBAN/BIC, Handelsregister-

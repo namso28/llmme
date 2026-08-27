@@ -1,0 +1,64 @@
+<div class="app" style="width: 1440px; height: 900px;">
+  <!--INCLUDE:_rail.html-->
+
+  <main class="stage">
+    <div class="topbar">
+      <span class="topbar__title">Chat mit meinem Lebenslauf</span>
+      <button class="btn btn--ghost" type="button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg>
+        <span>Unterlagen öffnen</span>
+      </button>
+    </div>
+
+    <div class="log">
+      <div class="column thread">
+        <div class="turn--user">
+          <div class="bubble">Welche Erfahrung hast du mit KI in Produktivsystemen?</div>
+        </div>
+
+        <div class="turn--bot">
+          <span class="bot-mark">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.2 13.9 8.6 19.3 10.5 13.9 12.4 12 17.8 10.1 12.4 4.7 10.5 10.1 8.6z"/></svg>
+          </span>
+          <div class="answer">
+            <p>Zwei Dinge sind bei anwalt.de produktiv gegangen: eine KI-basierte Lösung zur automatisierten Textzusammenfassung — von der Modellauswahl über die OpenAI-Integration bis zur serverlosen Architektur — und ein KI-gestützter Toxicity-Detector-Client, den ich als Symfony-Service in die Backend-Landschaft eingebunden habe.</p>
+            <p>Dazu kommt der tägliche Einsatz von LLMs in der Entwicklung selbst: Konzeption, Refactoring, Code-Reviews, Testgenerierung und Dokumentation. Der Schwerpunkt liegt auf Prompt- und Context-Engineering, damit die Ergebnisse reproduzierbar bleiben statt zufällig gut.</p>
+            <span class="answer__source">Quelle: Lebenslauf; Arbeitszeugnis der anwalt.de services AG, 30.11.2025</span>
+          </div>
+        </div>
+
+        <div class="turn--user">
+          <div class="bubble">Und wie groß war das Team, das du geführt hast?</div>
+        </div>
+
+        <div class="turn--bot">
+          <span class="bot-mark">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.2 13.9 8.6 19.3 10.5 13.9 12.4 12 17.8 10.1 12.4 4.7 10.5 10.1 8.6z"/></svg>
+          </span>
+          <div class="answer">
+            <span class="typing"><i></i><i></i><i></i></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dock">
+      <div class="column">
+        <div class="prompts">
+          <span class="prompt">Was sind Osmans stärkste Technologien?</span>
+          <span class="prompt">Erzähl mir von einem Projekt, auf das er stolz ist.</span>
+          <span class="prompt">Wie arbeitet er im Team?</span>
+          <span class="prompt">Passt er zu einer Rolle als Senior Frontend Engineer?</span>
+          <span class="prompt">Welche Erfahrung hat er mit KI in Produktivsystemen?</span>
+          <span class="prompt">Was sagt das Zeugnis zur Führung?</span>
+        </div>
+        <div class="composer">
+          <span class="composer__field">Frag nach Werdegang, Projekten, Technologien…</span>
+          <span class="send">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m6 11 6-6 6 6"/></svg>
+          </span>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

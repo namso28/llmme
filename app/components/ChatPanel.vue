@@ -4,8 +4,13 @@ import type { ChatMessage } from '#shared/types'
 const props = defineProps<{
   slug: string
   name: string
+  avatar?: string
   suggestedQuestions: string[]
 }>()
+
+/* Wie in der Seitenleiste: fehlt oder bricht das Porträt, stehen die Initialen. */
+const avatarBroken = ref(false)
+const showAvatar = computed(() => Boolean(props.avatar) && !avatarBroken.value)
 
 const messages = ref<ChatMessage[]>([])
 const input = ref('')
@@ -139,59 +144,122 @@ onBeforeUnmount(() => controller?.abort())
 </script>
 
 <template>
-  <section class="chat">
-    <header class="chat__header">
-      <h2 class="chat__title">Fragen zu {{ name }}</h2>
-    </header>
+  <!-- Der Bereich trägt seinen Namen nur für Screenreader: sichtbar ist keine
+       Überschrift mehr, aber die Region bleibt benannt. -->
+  <section class="chat" :aria-label="`Fragen zu ${name}`">
+    <div
+      ref="scrollArea"
+      class="chat__log"
+      :class="{ 'chat__log--empty': !messages.length }"
+    >
+      <div v-if="!messages.length" class="column welcome">
+        <div class="chat__glow" />
 
-    <div ref="scrollArea" class="chat__log">
-      <p v-if="!messages.length" class="chat__placeholder">
-        Stelle eine Frage — oder wähle eine der Vorschläge unten.
-      </p>
+        <div class="welcome__intro">
+          <!-- Die Begrüßung ist die erste Nachricht im Verlauf, keine
+               Überschrift über einer leeren Fläche — das Gespräch hat damit
+               schon begonnen, wenn jemand ankommt. Sie spricht die Person
+               selbst (daher ihr Monogramm), denn der Assistent gibt sich laut
+               System-Prompt nie als sie aus, sondern antwortet über sie. -->
+          <div class="turn--bot greeting">
+            <span class="bot-mark bot-mark--person">
+              <img
+                v-if="showAvatar"
+                class="avatar__img"
+                :src="avatar"
+                :alt="name"
+                @error="avatarBroken = true"
+              >
+              <template v-else>{{ initialsOf(name) }}</template>
+            </span>
+            <div>
+              <h2 class="welcome__title">Hallo, ich bin {{ name }}.</h2>
+              <p class="welcome__lead">
+                Statt meinen Lebenslauf durchzublättern, kannst du hier einfach fragen —
+                zu Werdegang, Projekten, Technologien oder Arbeitsweise.
+                Ein KI-Assistent antwortet an meiner Stelle, ausschließlich aus meinen
+                Unterlagen, und nennt zu jeder Antwort die Quelle.
+              </p>
+            </div>
+          </div>
+        </div>
 
-      <div
-        v-for="(message, index) in messages"
-        :key="index"
-        class="bubble"
-        :class="`bubble--${message.role}`"
-      >
-        <template v-if="message.content">
-          <span>{{ split(message.content).body }}</span>
-          <span v-if="split(message.content).source" class="bubble__source">
-            {{ split(message.content).source }}
-          </span>
+        <div v-if="suggestedQuestions.length" class="suggestions">
+          <button
+            v-for="question in suggestedQuestions"
+            :key="question"
+            type="button"
+            class="suggestion"
+            :disabled="isStreaming"
+            @click="send(question)"
+          >
+            <span class="suggestion__icon"><AppIcon name="ask" :size="18" /></span>
+            <span>{{ question }}</span>
+          </button>
+        </div>
+      </div>
+
+      <div v-else class="column thread">
+        <template v-for="(message, index) in messages" :key="index">
+          <div v-if="message.role === 'user'" class="turn--user">
+            <div class="bubble">{{ message.content }}</div>
+          </div>
+
+          <div v-else class="turn--bot">
+            <span class="bot-mark"><AppIcon name="sparkle" :size="15" /></span>
+            <div class="answer">
+              <template v-if="message.content">
+                <span>{{ split(message.content).body }}</span>
+                <span v-if="split(message.content).source" class="answer__source">
+                  {{ split(message.content).source }}
+                </span>
+              </template>
+              <span v-else class="typing" aria-label="Antwort wird geschrieben"><i /><i /><i /></span>
+            </div>
+          </div>
         </template>
-        <span v-else class="bubble__typing" aria-label="Antwort wird geschrieben"><i /><i /><i /></span>
       </div>
     </div>
 
-    <p v-if="errorMessage" class="chat__error" role="alert">{{ errorMessage }}</p>
+    <div class="dock">
+      <form class="column" @submit="onSubmit">
+        <!-- Im Leerzustand stehen die Vorschläge als Karten mitten auf der
+             Seite. Sobald das Gespräch läuft, bleiben sie als schmale Leiste
+             über der Eingabe erreichbar — als Karten würden sechs Fragen den
+             Verlauf dauerhaft nach oben drücken. -->
+        <div v-if="messages.length && suggestedQuestions.length" class="prompts">
+          <button
+            v-for="question in suggestedQuestions"
+            :key="question"
+            type="button"
+            class="prompt"
+            :disabled="isStreaming"
+            @click="send(question)"
+          >
+            {{ question }}
+          </button>
+        </div>
 
-    <div v-if="suggestedQuestions.length" class="chat__suggestions">
-      <button
-        v-for="question in suggestedQuestions"
-        :key="question"
-        type="button"
-        class="chip"
-        :disabled="isStreaming"
-        @click="send(question)"
-      >
-        {{ question }}
-      </button>
+        <div class="composer">
+          <input
+            v-model="input"
+            class="composer__field"
+            type="text"
+            maxlength="2000"
+            placeholder="Frag nach Werdegang, Projekten, Technologien…"
+            :disabled="isStreaming"
+            aria-label="Deine Frage"
+          >
+          <button v-if="isStreaming" type="button" class="send send--stop" aria-label="Antwort stoppen" @click="stop">
+            <AppIcon name="stop" :size="16" />
+          </button>
+          <button v-else type="submit" class="send" :disabled="!input.trim()" aria-label="Frage senden">
+            <AppIcon name="send" :size="17" />
+          </button>
+        </div>
+
+        <p v-if="errorMessage" class="chat__error" role="alert">{{ errorMessage }}</p>
+      </form>
     </div>
-
-    <form class="chat__form" @submit="onSubmit">
-      <input
-        v-model="input"
-        class="chat__input"
-        type="text"
-        maxlength="2000"
-        placeholder="Deine Frage…"
-        :disabled="isStreaming"
-        aria-label="Deine Frage"
-      >
-      <button v-if="isStreaming" type="button" class="btn btn--ghost" @click="stop">Stopp</button>
-      <button v-else type="submit" class="btn" :disabled="!input.trim()">Senden</button>
-    </form>
   </section>
 </template>

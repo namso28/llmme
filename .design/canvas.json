@@ -1,0 +1,16 @@
+{
+  "artboards": [
+    { "file": "Main.dc.html", "title": "Desktop — Start", "x": 0, "y": 0, "w": 1440, "h": 900 },
+    { "file": "Conversation.dc.html", "title": "Desktop — Gespräch", "x": 1560, "y": 0, "w": 1440, "h": 900 },
+    { "file": "SourcePanel.dc.html", "title": "Desktop — Arbeitszeugnis geöffnet", "x": 3120, "y": 0, "w": 1440, "h": 900 },
+    { "file": "MobileWelcome.dc.html", "title": "Mobil — Start", "x": 0, "y": 1080, "w": 390, "h": 844 },
+    { "file": "MobileChat.dc.html", "title": "Mobil — Gespräch", "x": 510, "y": 1080, "w": 390, "h": 844 },
+    { "file": "Components.dc.html", "title": "Bausteine", "x": 1020, "y": 1080, "w": 900, "h": 780 }
+  ],
+  "annotations": [
+    { "id": "note-direction", "x": 0, "y": -190, "w": 620, "text": "Chat mit meinem Lebenslauf — dunkle Richtung\n\nDer Chat ist die Seite, nicht eine Spalte daneben. Links nur Identität und Quellen, in der Mitte das Gespräch auf 720 px, unten die Eingabe. Der blaue Akzent (#5EA9F4) sitzt auf derselben Helligkeit und Buntheit wie der Terrakotta-Ton des bisherigen Themes — die Palette bleibt im Gleichgewicht, nur der Farbton wandert. Das Serif-Display ist aus dem bestehenden Theme übernommen." },
+    { "id": "note-sources", "x": 3120, "y": -190, "w": 620, "text": "Die Quelle steht als schlichte Fußnote unter der Antwort — \"Quelle: Lebenslauf\", nicht verlinkt. Die Unterlagen schlägt man selbst auf: über die Topbar oder die Seitenleiste. Lebenslauf und Arbeitszeugnis liegen dann als zwei Reiter rechts daneben, statt dauerhaft eine Spalte zu belegen." },
+    { "id": "note-mobile", "x": 0, "y": 1990, "w": 620, "text": "Mobil: keine gezeichnete Statusleiste und keine Fake-Tastatur — die rendert das Gerät selbst. Trefferflächen ab 44 px, Eingabe unten fixiert." }
+  ],
+  "launch": { "view": "canvas" }
+}

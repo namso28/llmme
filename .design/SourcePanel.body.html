@@ -1,0 +1,131 @@
+<!--CSS-->
+.panel {
+  width: 520px; flex: none;
+  display: flex; flex-direction: column;
+  background: var(--rail);
+  border-left: 1px solid var(--hair);
+}
+.panel__head {
+  flex: none;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 58px; padding: 0 20px 0 24px;
+  border-bottom: 1px solid var(--hair);
+}
+.panel__tabs { display: flex; gap: 4px; padding: 14px 20px 6px; }
+.tab {
+  padding: 6px 12px; border-radius: 999px;
+  font-size: 12.5px; color: var(--muted);
+  border: 1px solid transparent;
+}
+.tab--on { background: var(--accent-soft); border-color: var(--accent-line); color: var(--accent); }
+.panel__origin {
+  margin: 0 0 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--hair);
+  color: var(--faint);
+  font-size: 12px;
+}
+.icon-btn {
+  width: 34px; height: 34px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 8px; color: var(--muted);
+}
+.panel__body { flex: 1; min-height: 0; overflow: hidden; padding: 12px 24px 24px; }
+.doc h2 {
+  font-weight: 500;
+  font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--faint);
+  margin: 26px 0 12px; padding-bottom: 8px;
+  border-bottom: 1px solid var(--hair);
+}
+.doc h2:first-child { margin-top: 0; }
+.doc h3 { font-size: 15px; font-weight: 600; margin: 0 0 2px; }
+.doc .when { color: var(--faint); font-size: 12.5px; margin: 0 0 10px; }
+.doc ul { margin: 0; padding-left: 17px; }
+.doc li { margin: 7px 0; font-size: 13.5px; line-height: 1.6; color: var(--muted); }
+<!--/CSS-->
+<div class="app" style="width: 1440px; height: 900px;">
+  <!--INCLUDE:_rail.html-->
+
+  <main class="stage">
+    <div class="topbar">
+      <span class="topbar__title">Chat mit meinem Lebenslauf</span>
+      <button class="btn" type="button" style="border-color: rgba(94,169,244,0.32); background: rgba(94,169,244,0.12); color: #5ea9f4;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg>
+        <span>Unterlagen schließen</span>
+      </button>
+    </div>
+
+    <div class="log">
+      <div class="column thread">
+        <div class="turn--user">
+          <div class="bubble">Welche Erfahrung hast du mit KI in Produktivsystemen?</div>
+        </div>
+
+        <div class="turn--bot">
+          <span class="bot-mark">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.2 13.9 8.6 19.3 10.5 13.9 12.4 12 17.8 10.1 12.4 4.7 10.5 10.1 8.6z"/></svg>
+          </span>
+          <div class="answer">
+            <p>Zwei Dinge sind bei anwalt.de produktiv gegangen: eine KI-basierte Lösung zur automatisierten Textzusammenfassung — von der Modellauswahl über die OpenAI-Integration bis zur serverlosen Architektur — und ein KI-gestützter Toxicity-Detector-Client als Symfony-Service.</p>
+            <span class="answer__source">Quelle: Lebenslauf</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dock">
+      <div class="column">
+        <div class="prompts">
+          <span class="prompt">Was sind Osmans stärkste Technologien?</span>
+          <span class="prompt">Erzähl mir von einem Projekt, auf das er stolz ist.</span>
+          <span class="prompt">Wie arbeitet er im Team?</span>
+          <span class="prompt">Passt er zu einer Rolle als Senior Frontend Engineer?</span>
+          <span class="prompt">Welche Erfahrung hat er mit KI in Produktivsystemen?</span>
+          <span class="prompt">Was sagt das Zeugnis zur Führung?</span>
+        </div>
+        <div class="composer">
+          <span class="composer__field">Frag nach Werdegang, Projekten, Technologien…</span>
+          <span class="send">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m6 11 6-6 6 6"/></svg>
+          </span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <aside class="panel">
+    <div class="panel__head">
+      <span style="font-family: 'Newsreader', Georgia, serif; font-size: 17px;">Arbeitszeugnis</span>
+      <span style="display: flex; gap: 2px;">
+        <span class="icon-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 9V3.5h11V9"/><rect x="3" y="9" width="18" height="7" rx="2"/><path d="M6.5 14h11v6.5h-11z"/></svg>
+        </span>
+        <span class="icon-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </span>
+      </span>
+    </div>
+
+    <div class="panel__tabs">
+      <span class="tab">Lebenslauf</span>
+      <span class="tab tab--on">Arbeitszeugnis</span>
+    </div>
+
+    <div class="panel__body">
+      <div class="doc">
+        <p class="panel__origin">Arbeitszeugnis der anwalt.de services AG, 30.11.2025</p>
+        <h2>Anstellung</h2>
+        <p>Osman Turan war vom 01.08.2017 bis zum 30.11.2025 bei der anwalt.de services AG in der IT-Abteilung angestellt. Zunächst als Software Engineer, ab dem 01.10.2024 als Senior Software Engineer.</p>
+        <h2>Tätigkeiten laut Zeugnis</h2>
+        <ul>
+          <li>Übernahme der Rolle des Tech Leads im Frontend-Bereich mit Verantwortung für Architekturkonzeption, technische Leitung und Coaching des Entwicklerteams.</li>
+          <li>Strategische Beratung bei technologischen Fragestellungen sowie enge Zusammenarbeit mit Stakeholdern zur Ableitung technischer Lösungen.</li>
+          <li>Definition und Einführung unternehmensweiter Standards für Frontend-Entwicklung, Code-Qualität und Architekturprinzipien.</li>
+        </ul>
+        <h2>Leistung und Verhalten</h2>
+        <p>Er war stets hilfsbereit, zuvorkommend und im Kollegenkreis ausgesprochen geschätzt.</p>
+      </div>
+    </div>
+  </aside>
+</div>
