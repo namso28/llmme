@@ -1,0 +1,211 @@
+:root {
+  --bg: #fbfaf8;
+  --surface: #ffffff;
+  --border: #e4e1db;
+  --text: #1b1a18;
+  --muted: #6b665f;
+  --accent: #9c4221;
+  --accent-soft: #f6ece7;
+  --radius: 10px;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #16151a;
+    --surface: #1e1d24;
+    --border: #32303a;
+    --text: #eceaf2;
+    --muted: #a09bab;
+    --accent: #e8875c;
+    --accent-soft: #2b2028;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--accent); }
+
+.page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 5rem;
+}
+.page--narrow { max-width: 640px; }
+
+/* --- Startseite ------------------------------------------------------------ */
+.masthead { margin-bottom: 2.5rem; }
+.masthead__title { font-family: var(--font-serif); font-size: 2.5rem; margin: 0; }
+.masthead__subtitle { color: var(--muted); margin: 0.25rem 0 0; }
+
+.profile-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.75rem; }
+.profile-list__item {
+  display: block;
+  padding: 1rem 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  text-decoration: none;
+  color: inherit;
+}
+.profile-list__item:hover { border-color: var(--accent); }
+.profile-list__name { display: block; font-weight: 600; }
+.profile-list__headline { display: block; color: var(--muted); font-size: 0.9rem; }
+.empty { color: var(--muted); }
+code { font-size: 0.9em; background: var(--accent-soft); padding: 0.1em 0.35em; border-radius: 4px; }
+
+/* --- Profilseite ----------------------------------------------------------- */
+.profile__header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem 2.5rem;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid var(--text);
+  margin-bottom: 2.5rem;
+}
+.profile__name { font-family: var(--font-serif); font-size: 2.75rem; line-height: 1.1; margin: 0; }
+.profile__headline { color: var(--muted); margin: 0.4rem 0 0; font-size: 1.05rem; }
+
+.profile__facts { display: grid; gap: 0.35rem; margin: 0; font-size: 0.875rem; }
+.profile__facts > div { display: flex; gap: 0.6rem; }
+.profile__facts dt { color: var(--muted); min-width: 5.5rem; }
+.profile__facts dd { margin: 0; }
+
+.profile__body { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 3rem; align-items: start; }
+@media (max-width: 900px) {
+  .profile__body { grid-template-columns: minmax(0, 1fr); }
+}
+
+.profile__chat { position: sticky; top: 2rem; }
+@media (max-width: 900px) {
+  .profile__chat { position: static; }
+}
+
+/* --- Gerendertes Markdown --------------------------------------------------- */
+.prose { max-width: 68ch; }
+.prose h2 {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--muted);
+  margin: 2.5rem 0 1rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--border);
+}
+.prose h3 { font-size: 1.05rem; margin: 1.75rem 0 0.15rem; }
+.prose h3 + p { color: var(--muted); font-size: 0.875rem; margin: 0 0 0.6rem; }
+.prose ul { padding-left: 1.15rem; margin: 0.5rem 0; }
+.prose li { margin: 0.3rem 0; }
+.prose p { margin: 0.75rem 0; }
+
+/* --- Chat ------------------------------------------------------------------- */
+.chat {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+}
+.chat__header { margin-bottom: 1rem; }
+.chat__title { font-size: 1rem; margin: 0; }
+.chat__hint { font-size: 0.8rem; color: var(--muted); margin: 0.2rem 0 0; }
+
+.chat__log {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-height: 220px;
+  max-height: 46vh;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+.chat__placeholder { color: var(--muted); font-size: 0.9rem; margin: auto 0; }
+
+.bubble {
+  padding: 0.6rem 0.85rem;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  white-space: pre-wrap;
+  max-width: 92%;
+}
+.bubble--user { align-self: flex-end; background: var(--accent-soft); color: var(--text); }
+.bubble--assistant { align-self: flex-start; background: transparent; border: 1px solid var(--border); }
+
+.bubble__typing { display: inline-flex; gap: 4px; padding: 0.2rem 0; }
+.bubble__typing i {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--muted);
+  animation: blink 1.2s infinite ease-in-out;
+}
+.bubble__typing i:nth-child(2) { animation-delay: 0.18s; }
+.bubble__typing i:nth-child(3) { animation-delay: 0.36s; }
+@keyframes blink { 0%, 60%, 100% { opacity: 0.25; } 30% { opacity: 1; } }
+
+.chat__error {
+  margin: 0.75rem 0 0;
+  font-size: 0.85rem;
+  color: #b3261e;
+}
+
+.chat__suggestions { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1rem; }
+.chip {
+  font: inherit;
+  font-size: 0.8rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+.chip:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+.chip:disabled { opacity: 0.5; cursor: default; }
+
+.chat__form { display: flex; gap: 0.5rem; margin-top: 1rem; }
+.chat__input {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  font-size: 0.9rem;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--text);
+}
+.chat__input:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+
+.btn {
+  font: inherit;
+  font-size: 0.9rem;
+  padding: 0.55rem 1rem;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+}
+.btn:disabled { opacity: 0.45; cursor: default; }
+.btn--ghost { background: transparent; color: var(--accent); }
+
+/* --- Druck: nur der Lebenslauf --------------------------------------------- */
+@media print {
+  .profile__chat, .masthead__subtitle { display: none; }
+  .profile__body { grid-template-columns: 1fr; }
+  body { background: #fff; color: #000; }
+}
