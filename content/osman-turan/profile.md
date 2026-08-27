@@ -5,7 +5,7 @@ location: Nürnberg / Remote
 email: turan.2104@icloud.com
 links:
   - label: GitHub
-    url: https://github.com/dein-handle
+    url: https://github.com/namso28
   - label: LinkedIn
     url: https://linkedin.com/in/dein-handle
 suggestedQuestions:
