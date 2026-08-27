@@ -15,6 +15,29 @@ const scrollArea = ref<HTMLElement | null>(null)
 
 let controller: AbortController | null = null
 
+/**
+ * Trennt eine abschließende "Quelle: …"-Zeile vom Antworttext ab, damit sie als
+ * Fußnote gesetzt werden kann. Während des Streamens greift das erst, sobald die
+ * Zeile vollständig ist — bis dahin bleibt sie normaler Text.
+ */
+function split(content: string): { body: string; source: string | null } {
+  // Die Quelle steht mal am Ende, mal — bei kleineren Modellen — als erste
+  // Zeile. Beide Positionen werden abgefangen, damit sie nie als Fließtext
+  // durchrutscht.
+  const leading = content.match(/^\s*(Quelle:\s*[^\n]+)\n+/)
+  if (leading) {
+    return { body: content.slice(leading[0].length).trimStart(), source: leading[1]!.trim() }
+  }
+
+  // Am Ende ohne erzwungenen Zeilenumbruch, weil die Quelle gern an den letzten
+  // Satz gehängt wird. Ein Satzanfang oder Satzende muss aber davor stehen,
+  // sonst zerschneidet ein beiläufiges "Die Quelle: …" mitten im Text die Antwort.
+  const trailing = content.match(/(^|\n|[.!?]\s+)(Quelle:\s*[^\n]+?)\s*$/)
+  if (!trailing) return { body: content, source: null }
+  const sourceStart = trailing.index! + trailing[1]!.length
+  return { body: content.slice(0, sourceStart).trimEnd(), source: trailing[2]!.trim() }
+}
+
 async function scrollToBottom() {
   await nextTick()
   const el = scrollArea.value
@@ -119,7 +142,6 @@ onBeforeUnmount(() => controller?.abort())
   <section class="chat">
     <header class="chat__header">
       <h2 class="chat__title">Fragen zu {{ name }}</h2>
-      <p class="chat__hint">Antworten stammen ausschließlich aus dem hinterlegten Lebenslauf.</p>
     </header>
 
     <div ref="scrollArea" class="chat__log">
@@ -133,7 +155,12 @@ onBeforeUnmount(() => controller?.abort())
         class="bubble"
         :class="`bubble--${message.role}`"
       >
-        <span v-if="message.content">{{ message.content }}</span>
+        <template v-if="message.content">
+          <span>{{ split(message.content).body }}</span>
+          <span v-if="split(message.content).source" class="bubble__source">
+            {{ split(message.content).source }}
+          </span>
+        </template>
         <span v-else class="bubble__typing" aria-label="Antwort wird geschrieben"><i /><i /><i /></span>
       </div>
     </div>

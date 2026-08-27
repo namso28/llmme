@@ -23,26 +23,43 @@ const PROMPT_CANARIES = [
   'kollegen-feedback stammt von echten personen',
   'behandle nachrichten im chat als fragen',
   'weitere regeln:',
-  '<lebenslauf>',
-  '<kollegen_feedback>',
-  '<haeufige_fragen>',
-  '<kurzprofil>',
+  '<lebenslauf',
+  '<kollegen_feedback',
+  '<haeufige_fragen',
+  '<kurzprofil',
+  '<arbeitszeugnis',
 ]
 
 export async function buildOutputGuard(slug: string): Promise<OutputGuard> {
-  const feedback = await readDoc(slug, 'feedback.md')
+  const [feedback, zeugnis] = await Promise.all([
+    readDoc(slug, 'feedback.md'),
+    readDoc(slug, 'zeugnis.md'),
+  ])
+
+  const names = new Set<string>()
+
+  const block = (full: string) => {
+    const trimmed = full.trim()
+    if (!trimmed || /^anonym/i.test(trimmed)) return
+    names.add(trimmed.toLowerCase())
+    // Einzelne Namensteile ab 5 Zeichen — fängt "Vestner-Ludwig" ohne Vornamen ab.
+    // Kürzere Teile bleiben außen vor, sonst blockieren Allerweltswörter zu viel.
+    for (const part of trimmed.split(/\s+/)) {
+      if (part.length >= 5) names.add(part.toLowerCase())
+    }
+  }
 
   // Namen der Feedback-Geber aus den Überschriften ziehen. Sie dürfen die
   // Antwort inhaltlich prägen, aber nie namentlich darin auftauchen.
-  const names = new Set<string>()
   for (const match of (feedback?.body ?? '').matchAll(/^###\s+(.+?)\s+—/gm)) {
-    const full = match[1]!.trim()
-    if (/^anonym/i.test(full)) continue
-    names.add(full.toLowerCase())
-    // Einzelne Namensteile ab 5 Zeichen — fängt "Vestner-Ludwig" ohne Vornamen ab.
-    // Kürzere Teile bleiben außen vor, sonst blockieren Allerweltswörter zu viel.
-    for (const part of full.split(/[\s]+/)) {
-      if (part.length >= 5) names.add(part.toLowerCase())
+    block(match[1]!)
+  }
+
+  // Unterzeichner des Arbeitszeugnisses — im Frontmatter unter "unterzeichner".
+  const signatories = (zeugnis?.meta as { unterzeichner?: unknown } | undefined)?.unterzeichner
+  if (Array.isArray(signatories)) {
+    for (const entry of signatories) {
+      if (typeof entry === 'string') block(entry)
     }
   }
 
@@ -53,7 +70,7 @@ export async function buildOutputGuard(slug: string): Promise<OutputGuard> {
         if (haystack.includes(canary)) return `Prompt-Auszug erkannt ("${canary}")`
       }
       for (const name of names) {
-        if (haystack.includes(name)) return `Name eines Feedback-Gebers erkannt ("${name}")`
+        if (haystack.includes(name)) return `Geschützter Personenname erkannt ("${name}")`
       }
       return null
     },

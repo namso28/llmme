@@ -2,7 +2,7 @@ import matter from 'gray-matter'
 import { marked } from 'marked'
 import type { ProfileMeta } from '#shared/types'
 
-export type ContentFile = 'profile.md' | 'cv.md' | 'feedback.md' | 'faq.md'
+export type ContentFile = 'profile.md' | 'cv.md' | 'feedback.md' | 'faq.md' | 'zeugnis.md'
 
 interface Doc {
   meta: Record<string, unknown>

@@ -36,13 +36,6 @@ useHead(() => ({ title: profile.value ? `${profile.value.meta.name} — llmme` :
     </header>
 
     <div class="profile__body">
-      <article class="cv">
-        <!-- eslint-disable-next-line vue/no-v-html -- Quelle sind ausschließlich eigene content/-Dateien -->
-        <div class="prose" v-html="profile.introHtml" />
-        <!-- eslint-disable-next-line vue/no-v-html -->
-        <div class="prose" v-html="profile.cvHtml" />
-      </article>
-
       <aside class="profile__chat">
         <ChatPanel
           :slug="profile.slug"
@@ -50,6 +43,13 @@ useHead(() => ({ title: profile.value ? `${profile.value.meta.name} — llmme` :
           :suggested-questions="profile.meta.suggestedQuestions ?? []"
         />
       </aside>
+
+      <article class="cv">
+        <!-- eslint-disable-next-line vue/no-v-html -- Quelle sind ausschließlich eigene content/-Dateien -->
+        <div class="prose" v-html="profile.introHtml" />
+        <!-- eslint-disable-next-line vue/no-v-html -->
+        <div class="prose" v-html="profile.cvHtml" />
+      </article>
     </div>
   </main>
 </template>

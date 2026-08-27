@@ -12,8 +12,16 @@ Ein Ordner pro Person unter `content/`. Der Ordnername ist der Slug in der URL �
 |---|---|---|
 | `profile.md` | ✅ Kopfzeile + Kurzprofil | ✅ |
 | `cv.md` | ✅ Lebenslauf | ✅ |
+| `zeugnis.md` | ❌ | ✅ |
 | `feedback.md` | ❌ | ✅ |
 | `faq.md` | ❌ | ✅ |
+
+`zeugnis.md` nimmt das letzte Arbeitszeugnis auf. Der Assistent löst die
+Zeugnissprache in normale Sprache auf ("stets zur vollsten Zufriedenheit" → sehr
+gute Bewertung), statt die Formeln zu zitieren. Unterzeichner gehören ins
+Frontmatter unter `unterzeichner:` — von dort landen sie nicht im Prompt und
+werden zusätzlich vom Ausgabefilter blockiert, falls sie im Fließtext stehen
+bleiben.
 
 `feedback.md` und `faq.md` werden bewusst **nicht** ausgeliefert — sie prägen die
 Antworten des Assistenten, stehen aber nicht öffentlich auf der Seite.

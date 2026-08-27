@@ -1,3 +1,7 @@
+---
+quelle: Kollegen-Feedback
+---
+
 <!--
   Feedback von Kolleg:innen. Erscheint NICHT auf der Seite — geht nur in den Prompt.
   Der Assistent nutzt es für Fragen zu Arbeitsweise und Zusammenarbeit.

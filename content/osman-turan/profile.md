@@ -14,13 +14,18 @@ suggestedQuestions:
   - Wie arbeitet er im Team?
   - Passt er zu einer Rolle als Senior Frontend Engineer?
   - Welche Erfahrung hat er mit KI in Produktivsystemen?
+  - Was sagt das Zeugnis zur Führung?
 ---
 
-Senior Software Engineer und Tech & People Lead mit über 8 Jahren Erfahrung in der
+## Profil
+
+- Senior Software Engineer und Tech & People Lead mit über 8 Jahren Erfahrung in der
 Entwicklung skalierbarer Webplattformen und der fachlichen Führung von
 Entwicklerteams. Schwerpunkt auf TypeScript-basierten Frontend-Architekturen
 (Vue.js, Nuxt, Microfrontends) sowie performanten Backend-Services in PHP (Symfony)
-und JavaScript/Node.js. Verantwortlich für Architekturentscheidungen, technische
+und JavaScript/Node.js. 
+
+- Verantwortlich für Architekturentscheidungen, technische
 Standards und Code-Qualität. Praxiserprobte Erfahrung im produktiven Einsatz
 KI-gestützter Entwicklungstools, inklusive LLM-Integration in Produktivsysteme und
 Prompt- & Context-Engineering für reproduzierbare Ergebnisse.

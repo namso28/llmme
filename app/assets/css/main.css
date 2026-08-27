@@ -84,14 +84,40 @@ code { font-size: 0.9em; background: var(--accent-soft); padding: 0.1em 0.35em; 
 .profile__facts dt { color: var(--muted); min-width: 5.5rem; }
 .profile__facts dd { margin: 0; }
 
-.profile__body { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 3rem; align-items: start; }
-@media (max-width: 900px) {
-  .profile__body { grid-template-columns: minmax(0, 1fr); }
+/* Ab Tablet-Breite füllt die Seite exakt das Viewport. Gescrollt wird nur in
+   den beiden Spalten, nie im Dokument selbst. */
+.profile {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding-bottom: 1.5rem;
 }
 
-.profile__chat { position: sticky; top: 2rem; }
+.profile__header { flex: none; }
+
+.profile__body {
+  flex: 1;
+  min-height: 0; /* ohne das wächst der Grid über das Viewport hinaus */
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: stretch;
+}
+
+/* Chat links: füllt die Spalte, das Log darin scrollt. */
+.profile__chat { display: flex; min-height: 0; }
+.profile__chat > * { flex: 1; min-height: 0; }
+
+/* Lebenslauf rechts: scrollt als Ganzes. */
+.cv { min-height: 0; overflow-y: auto; padding-right: 1rem; }
+
 @media (max-width: 900px) {
-  .profile__chat { position: static; }
+  /* Auf schmalen Geräten wieder normales Seiten-Scrollen — zwei verschachtelte
+     Scrollflächen übereinander sind auf dem Handy unbedienbar. */
+  .profile { height: auto; overflow: visible; padding-bottom: 4rem; }
+  .profile__body { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
+  .cv { overflow: visible; padding-right: 0; }
 }
 
 /* --- Gerendertes Markdown --------------------------------------------------- */
@@ -129,10 +155,15 @@ code { font-size: 0.9em; background: var(--accent-soft); padding: 0.1em 0.35em; 
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  min-height: 220px;
-  max-height: 46vh;
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
   padding-right: 0.25rem;
+}
+
+@media (max-width: 900px) {
+  /* Ohne feste Höhe kollabiert das Log, sobald die Seite wieder mitscrollt. */
+  .chat__log { flex: none; min-height: 240px; max-height: 55vh; }
 }
 .chat__placeholder { color: var(--muted); font-size: 0.9rem; margin: auto 0; }
 
@@ -145,6 +176,15 @@ code { font-size: 0.9em; background: var(--accent-soft); padding: 0.1em 0.35em; 
 }
 .bubble--user { align-self: flex-end; background: var(--accent-soft); color: var(--text); }
 .bubble--assistant { align-self: flex-start; background: transparent; border: 1px solid var(--border); }
+
+.bubble__source {
+  display: block;
+  margin-top: 0.55rem;
+  padding-top: 0.45rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.75rem;
+  color: var(--muted);
+}
 
 .bubble__typing { display: inline-flex; gap: 4px; padding: 0.2rem 0; }
 .bubble__typing i {
@@ -207,5 +247,9 @@ code { font-size: 0.9em; background: var(--accent-soft); padding: 0.1em 0.35em; 
 @media print {
   .profile__chat, .masthead__subtitle { display: none; }
   .profile__body { grid-template-columns: 1fr; }
+  /* Die Viewport-Fixierung muss beim Druck weg, sonst endet der Lebenslauf
+     nach der ersten Seite. */
+  .profile { height: auto; overflow: visible; }
+  .cv { overflow: visible; padding-right: 0; }
   body { background: #fff; color: #000; }
 }
