@@ -14,6 +14,9 @@ export interface ProfileMeta {
   /** Pfad zum Porträt unter public/, z. B. "/avatar/osman-turan.jpg". Fehlt es,
    *  stehen die Initialen an seiner Stelle. */
   avatar?: string
+  /** Freigestelltes Porträt (transparenter Hintergrund) für die Startseite.
+   *  Fehlt es, tritt dort avatar an seine Stelle. */
+  avatarCutout?: string
   location?: string
   email?: string
   links?: ProfileLink[]

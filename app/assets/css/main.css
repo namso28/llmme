@@ -47,8 +47,215 @@ a:hover { color: #78c3ff; }
 }
 
 /* --- Startseite ------------------------------------------------------------ */
-.page { max-width: 1180px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
-.page--narrow { max-width: 640px; }
+/* Eine 3D-Szene: Das freigestellte Porträt steht in der Mitte, die Sprechblasen
+   liegen auf Tiefenebenen davor und dahinter. Maus und Scroll schreiben --mx,
+   --my und --sy auf die Szene; jede Ebene rechnet daraus ihre eigene
+   Verschiebung, gewichtet mit --depth. Das ergibt die Parallaxe, ohne dass
+   JavaScript einzelne Elemente anfasst. */
+.landing { --mx: 0; --my: 0; --sy: 0; }
+
+.hero {
+  position: relative;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 4.5rem 1.5rem 3rem;
+  overflow: hidden;
+  perspective: 1200px;
+}
+
+.hero__glow {
+  position: absolute;
+  top: 42%; left: 50%;
+  width: min(1100px, 130vw); height: 700px;
+  transform: translate3d(calc(-50% + var(--mx) * 26px), calc(-50% + var(--my) * 18px), 0);
+  background: radial-gradient(45% 45% at 50% 50%, rgba(94, 169, 244, 0.16), rgba(94, 169, 244, 0) 70%);
+  pointer-events: none;
+}
+
+.hero__stage {
+  position: relative;
+  width: min(980px, 100%);
+  height: clamp(240px, 40vh, 380px);
+  transform-style: preserve-3d;
+}
+
+/* Ebene 1: folgt der Maus und dem Scroll, je nach Tiefe. */
+.drift {
+  position: absolute;
+  transform:
+    translate3d(
+      calc(var(--mx) * var(--depth) * 22px),
+      calc(var(--my) * var(--depth) * 16px + var(--sy) * var(--depth) * -0.07px),
+      0
+    );
+  transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+  transform-style: preserve-3d;
+}
+
+/* Ebene 2: das ruhige Schweben. Getrennt von der Parallaxe, weil sich sonst
+   Animation und JavaScript um dieselbe transform-Eigenschaft streiten. */
+.float {
+  animation: floaty var(--dur, 8s) var(--delay, 0s) ease-in-out infinite alternate;
+  transform-style: preserve-3d;
+}
+@keyframes floaty {
+  from { transform: translateY(-9px); }
+  to { transform: translateY(9px); }
+}
+
+/* Position, Tiefe und Drehung je Blase. --depth bestimmt, wie stark sie der
+   Maus folgt, --z ihren Abstand in der Szene: Nähe wirkt größer und schärfer. */
+.drift--b1 { --depth: 2.2; --z: 90px; --rx: 6deg; --ry: 14deg; left: 2%; top: 14%; }
+.drift--b2 { --depth: 1.4; --z: 40px; --rx: -4deg; --ry: 16deg; left: 0%; top: 46%; }
+.drift--b3 { --depth: 2.6; --z: 110px; --rx: 5deg; --ry: -16deg; right: 1%; top: 24%; }
+.drift--b4 { --depth: 1.1; --z: 20px; --rx: -6deg; --ry: -12deg; right: 4%; top: 55%; }
+.drift--b5 { --depth: 0.6; --z: -60px; --rx: -3deg; --ry: 10deg; left: 12%; top: 74%; }
+.drift--portrait { --depth: 0.5; }
+
+/* Ebene 3: die eigentliche Blase, im Raum gedreht. */
+.bubble3d {
+  max-width: 15rem;
+  padding: 0.85rem 1.05rem;
+  border-radius: 16px 16px 16px 4px;
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--surface) 86%, transparent);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 24px 60px -28px rgba(0, 0, 0, 0.9);
+  color: var(--text);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  transform: translateZ(var(--z, 0)) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+}
+.bubble3d--ask {
+  border-radius: 16px 16px 4px 16px;
+  border-color: var(--accent-line);
+  background: color-mix(in srgb, var(--accent-soft) 70%, var(--bg));
+}
+.bubble3d__source {
+  display: block;
+  margin-top: 0.5rem;
+  padding-top: 0.45rem;
+  border-top: 1px solid var(--hair);
+  color: var(--faint);
+  font-size: 0.66rem;
+}
+/* Was hinten liegt, tritt zurück — sonst konkurriert es mit dem Porträt. */
+.drift--far .bubble3d { opacity: 0.6; filter: blur(0.6px); }
+
+.drift--portrait {
+  left: 50%; bottom: 0;
+  transform:
+    translate3d(
+      calc(-50% + var(--mx) * var(--depth) * 22px),
+      calc(var(--my) * var(--depth) * 16px + var(--sy) * var(--depth) * -0.07px),
+      0
+    );
+}
+.hero__portrait {
+  display: block;
+  width: min(300px, 52vw);
+  height: auto;
+  /* Die Bilddatei endet mit einer geraden Kante am Hemd. Auf dunklem Grund
+     sähe das abgeschnitten aus, deshalb läuft das Porträt nach unten aus. */
+  -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent 99%);
+  mask-image: linear-gradient(to bottom, #000 72%, transparent 99%);
+  /* Das Foto ist ein heller Ausschnitt vor dunklem Grund — der weiche Schatten
+     setzt ihn auf die Fläche, statt ihn aufgeklebt wirken zu lassen. */
+  filter: drop-shadow(0 30px 50px rgba(0, 0, 0, 0.55));
+}
+
+.hero__copy {
+  position: relative;
+  z-index: 2;
+  width: min(640px, 100%);
+  margin-top: 1.75rem;
+  text-align: center;
+  transform: translateY(calc(var(--sy) * -0.04px));
+}
+.hero__title {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  margin: 0;
+  text-wrap: balance;
+}
+.hero__lead {
+  margin: 1rem auto 0;
+  max-width: 34rem;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1.75rem;
+  padding: 0 1.4rem;
+  height: 52px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #0d1420;
+  font-size: 0.95rem;
+  font-weight: 500;
+  box-shadow: 0 18px 40px -18px rgba(94, 169, 244, 0.8);
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+.cta:hover {
+  color: #0d1420;
+  transform: translateY(-2px);
+  box-shadow: 0 22px 46px -16px rgba(94, 169, 244, 0.9);
+}
+
+/* --- Drei Schritte unter dem Aufmacher ------------------------------------- */
+.steps {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 1.5rem 7rem;
+}
+.steps__list {
+  list-style: none;
+  margin: 0 0 3rem;
+  padding: 3rem 0 0;
+  border-top: 1px solid var(--hair);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2rem;
+}
+.step { display: flex; flex-direction: column; gap: 0.6rem; }
+.step__no {
+  color: var(--accent);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  font-variant-numeric: tabular-nums;
+}
+.step__text { margin: 0; color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
+
+@media (max-width: 900px) {
+  .hero { padding: 4rem 1.25rem 3rem; }
+  .hero__stage { height: min(46vh, 340px); }
+  .hero__portrait { width: min(210px, 46vw); }
+  .bubble3d { max-width: 9.5rem; font-size: 0.73rem; padding: 0.6rem 0.8rem; }
+  /* Auf schmalen Geräten bleiben zwei Blasen. Sie rücken über den Kopf, weil
+     seitlich neben dem Porträt kein Platz für lesbaren Text ist. */
+  .drift--b2, .drift--b4, .drift--b5 { display: none; }
+  .drift--b1 { left: 0; top: 0; --z: 60px; }
+  .drift--b3 { right: 0; top: 21%; --z: 70px; }
+  .steps__list { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; padding-top: 2.5rem; }
+}
+
+/* Wer Bewegung abbestellt hat, bekommt dieselbe Komposition, nur still. */
+@media (prefers-reduced-motion: reduce) {
+  .float { animation: none; }
+  .drift, .hero__copy { transition: none; }
+}
 
 .masthead { margin-bottom: 2.5rem; }
 .masthead__title { font-family: var(--font-serif); font-weight: 400; font-size: 2.5rem; margin: 0; }

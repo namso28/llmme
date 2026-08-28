@@ -2,6 +2,7 @@
 name: Osman Turan
 headline: Senior Software Engineer · Tech & People Lead
 avatar: /avatar/osman-turan.png
+avatarCutout: /avatar/osman-turan-freigestellt.png
 location: Nürnberg / Remote
 email: turan.2104@icloud.com
 links:

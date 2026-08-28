@@ -4,7 +4,11 @@ import { readDoc } from './content'
  * Ausgabefilter. Prompt-Regeln sind eine Bitte an das Modell, keine Grenze:
  * llama3.1:8b gibt den System-Prompt auf Aufforderung wörtlich aus, Claude
  * paraphrasiert ihn. Beides darf einen Recruiter nicht erreichen, denn im
- * Prompt stehen die Klarnamen und Zitate echter Kolleg:innen.
+ * Prompt stehen Zitate echter Kolleg:innen und der Wortlaut des Zeugnisses.
+ *
+ * Das Kollegen-Feedback ist anonymisiert; die Namensprüfung greift damit nur
+ * noch für die Unterzeichner des Zeugnisses — und bleibt als Netz bestehen,
+ * falls jemand später wieder einen Klarnamen einträgt.
  *
  * Diese Prüfung läuft serverseitig über den Antwortstrom und ist vom Modell
  * nicht beeinflussbar.

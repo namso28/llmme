@@ -73,9 +73,16 @@ function createOllamaProvider(baseUrl: string, model: string): LLMProvider {
   }
 }
 
+/**
+ * Modelle, die output_config.effort NICHT kennen und eine Anfrage damit mit 400
+ * abweisen. Alles ab der 4.6-Generation unterstützt es, die 4.5er-Reihe nicht.
+ */
+const OHNE_EFFORT = [/^claude-haiku-4-5/, /^claude-sonnet-4-5/]
+
 /** Produktion: Anthropic Messages API über das offizielle SDK. */
 function createAnthropicProvider(apiKey: string, model: string): LLMProvider {
   const client = new Anthropic({ apiKey })
+  const kenntEffort = !OHNE_EFFORT.some(muster => muster.test(model))
 
   return {
     id: `anthropic:${model}`,
@@ -88,8 +95,9 @@ function createAnthropicProvider(apiKey: string, model: string): LLMProvider {
           // trägt den kompletten Lebenslauf — der ideale Cache-Präfix.
           system: [{ type: 'text', text: system, cache_control: { type: 'ephemeral' } }],
           // Kurze Antworten auf einem kleinen Kontext brauchen keine tiefe
-          // Deliberation. Thinking bleibt an (Standard), nur flacher.
-          output_config: { effort: 'low' },
+          // Deliberation. Wo effort greift, bleibt Thinking an, nur flacher;
+          // auf Haiku 4.5 denkt das Modell ohne thinking-Parameter ohnehin nicht.
+          ...(kenntEffort ? { output_config: { effort: 'low' as const } } : {}),
           messages,
         },
         { signal },

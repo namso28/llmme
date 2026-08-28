@@ -22,7 +22,7 @@ export default defineNuxtConfig({
     llmProvider: process.env.LLM_PROVIDER || 'ollama',
 
     anthropicApiKey: process.env.ANTHROPIC_API_KEY || '',
-    anthropicModel: process.env.ANTHROPIC_MODEL || 'claude-opus-5',
+    anthropicModel: process.env.ANTHROPIC_MODEL || 'claude-haiku-4-5',
 
     ollamaBaseUrl: process.env.OLLAMA_BASE_URL || 'http://localhost:11434',
     ollamaModel: process.env.OLLAMA_MODEL || 'llama3.1:8b',
