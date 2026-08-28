@@ -2,6 +2,9 @@
 # Bezeichnung, die der Assistent in der Quellenzeile seiner Antworten nennt.
 quelle: Arbeitszeugnis der anwalt.de services AG, 30.11.2025
 
+# Das eingescannte Original unter public/. Erscheint als Link über dem Text.
+pdf: /dokumente/arbeitszeugnis-osman-turan.pdf
+
 # Namen, die in einer Antwort NIE auftauchen dürfen. Der Ausgabefilter in
 # server/utils/guard.ts blockiert jede Antwort, die einen davon enthält.
 unterzeichner:

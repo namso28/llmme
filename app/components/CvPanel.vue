@@ -52,6 +52,19 @@ const title = computed(() => (showsZeugnis.value ? 'Arbeitszeugnis' : 'Lebenslau
     <div class="panel__body">
       <template v-if="showsZeugnis">
         <p class="panel__origin">{{ zeugnis!.label }}</p>
+
+        <!-- Das eingescannte Original ist das, was ein Recruiter am Ende sehen
+             will — deshalb steht es als eigene Schaltfläche über dem Text und
+             nicht als Verweis daneben. -->
+        <a
+          v-if="zeugnis!.pdf"
+          class="btn btn--on panel__download"
+          :href="zeugnis!.pdf"
+          download
+        >
+          <AppIcon name="download" :size="16" />
+          <span>Original als PDF herunterladen</span>
+        </a>
         <!-- eslint-disable-next-line vue/no-v-html -- Quelle sind ausschließlich eigene content/-Dateien -->
         <div class="prose" v-html="zeugnis!.html" />
       </template>

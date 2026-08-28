@@ -86,8 +86,14 @@ Projekt-Einstellungen:
 ```
 LLM_PROVIDER=anthropic
 ANTHROPIC_API_KEY=sk-ant-...
-ANTHROPIC_MODEL=claude-opus-5
+ANTHROPIC_MODEL=claude-haiku-4-5
 ```
+
+Die lokale `.env` steht in `.gitignore` und wird nicht mitdeployt — ohne diese
+drei Variablen in den Projekt-Einstellungen fällt der Server auf den Ollama-
+Adapter zurück und versucht, `localhost:11434` zu erreichen. Im Chatfenster
+steht dann nur "Der Assistent ist gerade nicht erreichbar"; der echte Grund
+steht in den Runtime-Logs unter `[chat] Stream fehlgeschlagen`.
 
 Ein lokales Modell kann auf Vercel nicht laufen (keine GPU, kein langlebiger
 Prozess) — deshalb der Adapter.

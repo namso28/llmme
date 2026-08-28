@@ -19,6 +19,7 @@ export default defineEventHandler(async (event): Promise<ProfilePayload> => {
   ])
 
   const label = typeof zeugnis?.meta?.quelle === 'string' ? zeugnis.meta.quelle.trim() : ''
+  const pdf = typeof zeugnis?.meta?.pdf === 'string' ? zeugnis.meta.pdf.trim() : ''
 
   return {
     slug,
@@ -30,6 +31,6 @@ export default defineEventHandler(async (event): Promise<ProfilePayload> => {
     // Das Zeugnis dagegen schon: es ist im Panel aufschlagbar. Sein Frontmatter
     // (Unterzeichner, Quellenbezeichnung) bleibt dabei außen vor, gray-matter
     // trennt es ab — ausgeliefert wird nur der Fließtext.
-    ...(zeugnis?.body ? { zeugnis: { label: label || 'Arbeitszeugnis', html: renderMarkdown(zeugnis.body) } } : {}),
+    ...(zeugnis?.body ? { zeugnis: { label: label || 'Arbeitszeugnis', html: renderMarkdown(zeugnis.body), ...(pdf ? { pdf } : {}) } } : {}),
   }
 })

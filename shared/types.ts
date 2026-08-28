@@ -28,6 +28,8 @@ export interface ProfileDoc {
   /** Bezeichnung aus dem Frontmatter, dieselbe, die der Assistent als Quelle nennt. */
   label: string
   html: string
+  /** Pfad zum eingescannten Original unter public/, falls hinterlegt. */
+  pdf?: string
 }
 
 /** Was die Profilseite zum Rendern braucht. Feedback und FAQ gehen weiterhin

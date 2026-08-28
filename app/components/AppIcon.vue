@@ -14,6 +14,7 @@ const paths: Record<string, string> = {
   mail: '<rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.5 7.5 8.5 5.5 8.5-5.5"/>',
   link: '<path d="M10 13a4 4 0 0 0 5.7.4l3-3a4 4 0 0 0-5.7-5.7l-1.7 1.7"/><path d="M14 11a4 4 0 0 0-5.7-.4l-3 3a4 4 0 0 0 5.7 5.7l1.7-1.7"/>',
   award: '<circle cx="12" cy="9" r="5"/><path d="m9 13.6-1 7.4 4-2.2 4 2.2-1-7.4"/>',
+  download: '<path d="M12 4v11m0 0 4-4m-4 4-4-4"/><path d="M5 19h14"/>',
   print: '<path d="M6.5 9V3.5h11V9"/><rect x="3" y="9" width="18" height="7" rx="2"/><path d="M6.5 14h11v6.5h-11z"/>',
   close: '<path d="M6 6l12 12M18 6 6 18"/>',
   send: '<path d="M12 19V5"/><path d="m6 11 6-6 6 6"/>',

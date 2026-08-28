@@ -124,35 +124,5 @@ onMounted(() => {
         </NuxtLink>
       </div>
     </section>
-
-    <section class="steps">
-      <ol class="steps__list">
-        <li class="step">
-          <span class="step__no">01</span>
-          <p class="step__text">Frag, was du wissen willst — frei formuliert.</p>
-        </li>
-        <li class="step">
-          <span class="step__no">02</span>
-          <p class="step__text">Die Antwort kommt in Sekunden, mit Quellenangabe.</p>
-        </li>
-        <li class="step">
-          <span class="step__no">03</span>
-          <p class="step__text">Lebenslauf und Zeugnis bleiben im Original einsehbar.</p>
-        </li>
-      </ol>
-
-      <ul v-if="profiles && profiles.length > 1" class="profile-list">
-        <li v-for="profile in profiles" :key="profile.slug">
-          <NuxtLink class="profile-list__item" :to="`/${profile.slug}`">
-            <span class="profile-list__name">{{ profile.name }}</span>
-            <span v-if="profile.headline" class="profile-list__headline">{{ profile.headline }}</span>
-          </NuxtLink>
-        </li>
-      </ul>
-
-      <p v-else-if="!profiles?.length" class="empty">
-        Noch kein Profil angelegt. Lege einen Ordner unter <code>content/&lt;slug&gt;/</code> an.
-      </p>
-    </section>
   </main>
 </template>
