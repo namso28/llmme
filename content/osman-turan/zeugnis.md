@@ -55,7 +55,7 @@ Workspace PRIME LEGAL AI. Die Gruppe beschäftigt rund 100 Mitarbeitende,
   (Berechtigungsabfragen nach Produktstufen), mit API-Integration, Testabdeckung
   über PHPUnit, Qualitätssicherung mit PHPStan und Dokumentation
 - Implementierung einer skalierbaren Service-Architektur auf Basis von Symfony,
-  inklusive Integration in die bestehende Systemlandschaft über gRPC und AWS Lambda
+  inklusive Integration in die bestehende Systemlandschaft über gRPC und AWS Lambda.
 
 ## Leistungsbeurteilung
 
