@@ -2,6 +2,7 @@ import { createEventStream } from 'h3'
 import { buildSystemPrompt } from '~~/server/utils/prompt'
 import { getLLMProvider } from '~~/server/utils/llm'
 import { buildOutputGuard } from '~~/server/utils/guard'
+import { erkenneSprache, sprachHinweis } from '~~/server/utils/language'
 import type { ChatMessage } from '#shared/types'
 
 const MAX_TURNS = 20
@@ -28,6 +29,14 @@ export default defineEventHandler(async (event) => {
 
   if (messages.length === 0 || messages.at(-1)?.role !== 'user') {
     throw createError({ statusCode: 400, statusMessage: 'Letzte Nachricht muss vom Nutzer stammen' })
+  }
+
+  // Der Sprachhinweis hängt an der Frage, nicht am System-Prompt: Der bleibt
+  // dadurch über alle Anfragen byte-identisch und damit zwischenspeicherbar.
+  const letzte = messages.at(-1)!
+  const sprache = erkenneSprache(letzte.content)
+  if (sprache) {
+    letzte.content = `${letzte.content}\n\n${sprachHinweis(sprache)}`
   }
 
   const system = await buildSystemPrompt(slug)

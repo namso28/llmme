@@ -8,6 +8,32 @@ const props = defineProps<{
   suggestedQuestions: string[]
 }>()
 
+/* Die Begrüßung schreibt sich Zeichen für Zeichen. Umgesetzt als gestaffelte
+   CSS-Animation statt per Timer: Der Server liefert den fertigen Text aus, jedes
+   Zeichen belegt seinen Platz von Anfang an (nur unsichtbar), und es gibt weder
+   ein Aufblitzen bei der Hydration noch ein Nachrücken der Vorschlagskarten.
+   Für Screenreader trägt die Überschrift ihren Text als aria-label — sonst
+   buchstabieren manche die Einzel-Spans. */
+const BEGRUESSUNG_LEAD
+  = 'Statt meinen Lebenslauf durchzublättern, kannst du hier einfach fragen — '
+  + 'zu Werdegang, Projekten, Technologien oder Arbeitsweise. Ein KI-Assistent '
+  + 'antwortet an meiner Stelle, ausschließlich aus meinen Unterlagen, und nennt '
+  + 'zu jeder Antwort die Quelle.'
+
+const TITEL_TEMPO = 0.035
+const LEAD_TEMPO = 0.008
+const PAUSE = 0.2
+
+const titelText = computed(() => `Hallo, ich bin ${props.name}.`)
+const titelZeichen = computed(() => [...titelText.value])
+const leadZeichen = [...BEGRUESSUNG_LEAD]
+const leadStart = computed(() => titelZeichen.value.length * TITEL_TEMPO + PAUSE)
+
+/* Die Vorschlagskarten kommen erst, wenn der Text zu Ende getippt ist — eine
+   nach der anderen, damit es wie ein Nachreichen wirkt und nicht wie ein Blitz. */
+const KARTEN_TEMPO = 0.07
+const kartenStart = computed(() => leadStart.value + leadZeichen.length * LEAD_TEMPO + PAUSE)
+
 /* Wie in der Seitenleiste: fehlt oder bricht das Porträt, stehen die Initialen. */
 const avatarBroken = ref(false)
 const showAvatar = computed(() => Boolean(props.avatar) && !avatarBroken.value)
@@ -173,12 +199,23 @@ onBeforeUnmount(() => controller?.abort())
               <template v-else>{{ initialsOf(name) }}</template>
             </span>
             <div>
-              <h2 class="welcome__title">Hallo, ich bin {{ name }}.</h2>
-              <p class="welcome__lead">
-                Statt meinen Lebenslauf durchzublättern, kannst du hier einfach fragen —
-                zu Werdegang, Projekten, Technologien oder Arbeitsweise.
-                Ein KI-Assistent antwortet an meiner Stelle, ausschließlich aus meinen
-                Unterlagen, und nennt zu jeder Antwort die Quelle.
+              <h2 class="welcome__title" :aria-label="titelText">
+                <span
+                  v-for="(zeichen, i) in titelZeichen"
+                  :key="`t${i}`"
+                  class="tippt"
+                  aria-hidden="true"
+                  :style="{ animationDelay: `${(i * TITEL_TEMPO).toFixed(3)}s` }"
+                >{{ zeichen }}</span>
+              </h2>
+              <p class="welcome__lead" :aria-label="BEGRUESSUNG_LEAD">
+                <span
+                  v-for="(zeichen, i) in leadZeichen"
+                  :key="`l${i}`"
+                  class="tippt"
+                  aria-hidden="true"
+                  :style="{ animationDelay: `${(leadStart + i * LEAD_TEMPO).toFixed(3)}s` }"
+                >{{ zeichen }}</span>
               </p>
             </div>
           </div>
@@ -186,10 +223,11 @@ onBeforeUnmount(() => controller?.abort())
 
         <div v-if="suggestedQuestions.length" class="suggestions">
           <button
-            v-for="question in suggestedQuestions"
+            v-for="(question, i) in suggestedQuestions"
             :key="question"
             type="button"
             class="suggestion"
+            :style="{ animationDelay: `${(kartenStart + i * KARTEN_TEMPO).toFixed(3)}s` }"
             :disabled="isStreaming"
             @click="send(question)"
           >

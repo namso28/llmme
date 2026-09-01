@@ -14,3 +14,6 @@
   Sinnvolle Fragen: Wechselmotivation, größte fachliche Herausforderung,
   Umgang mit Konflikten, Führungsverständnis, ideale Rolle, Arbeitsmodell.
 -->
+
+  **Warum suchst du eine neue Stelle?**
+ich wurde gekündigt

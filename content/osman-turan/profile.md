@@ -1,15 +1,12 @@
 ---
 name: Osman Turan
 headline: Senior Software Engineer · Tech & People Lead
-avatar: /avatar/osman-turan.png
+avatar: /avatar/osman-turan.jpeg
 avatarCutout: /avatar/osman-turan-freigestellt.png
 location: Nürnberg / Remote
 email: turan.2104@icloud.com
-links:
-  - label: GitHub
-    url: https://github.com/namso28
-  - label: LinkedIn
-    url: https://linkedin.com/in/dein-handle
+phone: "+49 1575 3254297"
+linkedin: https://www.linkedin.com/in/osman-turan-750168294/
 suggestedQuestions:
   - Was sind Osmans stärkste Technologien?
   - Erzähl mir von einem Projekt, auf das er stolz ist.

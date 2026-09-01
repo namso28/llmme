@@ -3,11 +3,6 @@ export interface ChatMessage {
   content: string
 }
 
-export interface ProfileLink {
-  label: string
-  url: string
-}
-
 export interface ProfileMeta {
   name: string
   headline?: string
@@ -19,7 +14,8 @@ export interface ProfileMeta {
   avatarCutout?: string
   location?: string
   email?: string
-  links?: ProfileLink[]
+  phone?: string
+  linkedin?: string
   suggestedQuestions?: string[]
 }
 

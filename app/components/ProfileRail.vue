@@ -7,17 +7,22 @@ defineEmits<{ open: [doc: 'cv' | 'zeugnis'] }>()
 
 const initials = computed(() => initialsOf(props.meta.name))
 
+/* tel: verträgt keine Leerzeichen — die Anzeige behält ihre Gliederung. */
+const telHref = computed(() => (props.meta.phone ?? '').replace(/[^\d+]/g, ''))
+
 /* Lädt das Porträt nicht, bleiben die Initialen — besser als ein kaputtes Bild. */
 const avatarBroken = ref(false)
 const showAvatar = computed(() => Boolean(props.meta.avatar) && !avatarBroken.value)
 
-/** GitHub und LinkedIn bekommen ihr Logo, alles andere ein generisches Symbol. */
-function iconFor(label: string): string {
-  const key = label.toLowerCase()
-  if (key.includes('github')) return 'github'
-  if (key.includes('linkedin')) return 'linkedin'
-  return 'link'
-}
+/* Angezeigt wird nur der sprechende Teil des Profilnamens. Die volle Adresse
+   passt nicht in die 248 px schmale Spalte, und die lange Ziffernfolge, die
+   LinkedIn bei Namensdopplungen anhängt, sagt niemandem etwas. */
+const linkedinText = computed(() =>
+  (props.meta.linkedin ?? '')
+    .replace(/^https?:\/\/(www\.)?linkedin\.com\/in\//, '')
+    .replace(/\/$/, '')
+    .replace(/-\d{6,}$/, ''),
+)
 </script>
 
 <template>
@@ -41,6 +46,24 @@ function iconFor(label: string): string {
           <AppIcon name="pin" :size="14" />
           <span>{{ meta.location }}</span>
         </p>
+        <a v-if="meta.email" class="rail__meta rail__mail" :href="`mailto:${meta.email}`">
+          <AppIcon name="mail" :size="14" />
+          <span>{{ meta.email }}</span>
+        </a>
+        <a v-if="meta.phone" class="rail__meta rail__mail" :href="`tel:${telHref}`">
+          <AppIcon name="phone" :size="14" />
+          <span>{{ meta.phone }}</span>
+        </a>
+        <a
+          v-if="meta.linkedin"
+          class="rail__meta rail__mail"
+          :href="meta.linkedin"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <AppIcon name="linkedin" :size="14" />
+          <span>{{ linkedinText }}</span>
+        </a>
       </div>
     </div>
 
@@ -53,30 +76,6 @@ function iconFor(label: string): string {
       <AppIcon name="doc" :size="16" />
       <span>Unterlagen</span>
     </button>
-
-    <div v-if="meta.links?.length || meta.email" class="rail__social">
-      <a
-        v-for="link in meta.links ?? []"
-        :key="link.url"
-        class="social"
-        :href="link.url"
-        target="_blank"
-        rel="noopener noreferrer"
-        :title="link.label"
-        :aria-label="link.label"
-      >
-        <AppIcon :name="iconFor(link.label)" :size="16" />
-      </a>
-      <a
-        v-if="meta.email"
-        class="social"
-        :href="`mailto:${meta.email}`"
-        title="E-Mail"
-        aria-label="E-Mail schreiben"
-      >
-        <AppIcon name="mail" :size="16" />
-      </a>
-    </div>
 
     <div class="rail__spacer" />
 
