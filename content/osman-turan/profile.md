@@ -7,13 +7,17 @@ location: Nürnberg / Remote
 email: turan.2104@icloud.com
 phone: "+49 1575 3254297"
 linkedin: https://www.linkedin.com/in/osman-turan-750168294/
+# Adressat sind vor allem Personalerinnen und Personaler, keine Architekten:
+# Die Vorschläge fragen nach Zusammenarbeit, Führung und Beurteilung, nicht
+# nach Technik. Fachliche Tiefe holt sich, wer sie braucht, über eine eigene
+# Frage — die Unterlagen geben sie her.
 suggestedQuestions:
-  - Was sind Osmans stärkste Technologien?
-  - Erzähl mir von einem Projekt, auf das er stolz ist.
-  - Wie arbeitet er im Team?
-  - Passt er zu einer Rolle als Senior Frontend Engineer?
-  - Welche Erfahrung hat er mit KI in Produktivsystemen?
-  - Was sagt das Zeugnis zur Führung?
+  - Wie führt er ein Team?
+  - Wie arbeitet er mit dem Produktmanagement?
+  - Wie hat er KI-Tools im Team eingeführt?
+  - Wie fällt sein Arbeitszeugnis aus?
+  - Wie beschreiben ihn Kolleginnen und Kollegen?
+  - Warum ist er heute nicht mehr bei anwalt.de?
 ---
 
 ## Profil
