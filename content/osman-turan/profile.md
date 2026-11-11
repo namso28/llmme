@@ -17,7 +17,7 @@ suggestedQuestions:
   - Wie hat er KI-Tools im Team eingeführt?
   - Wie fällt sein Arbeitszeugnis aus?
   - Wie beschreiben ihn Kolleginnen und Kollegen?
-  - Warum ist er heute nicht mehr bei anwalt.de?
+  - Wie gibt er Wissen im Team weiter?
 ---
 
 ## Profil
